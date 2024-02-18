@@ -27,6 +27,10 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
 
+cors:
+  allowed-origins:
+    - ${CORS_ALLOWED_ORIGINS}
+
 ---
 spring:
   config:
