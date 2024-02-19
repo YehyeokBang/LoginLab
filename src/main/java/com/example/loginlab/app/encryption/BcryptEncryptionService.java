@@ -17,4 +17,9 @@ public class BcryptEncryptionService implements EncryptionService {
         return bCryptPasswordEncoder.encode(input);
     }
 
+    @Override
+    public boolean match(String input, String encrypted) {
+        return bCryptPasswordEncoder.matches(input, encrypted);
+    }
+
 }
