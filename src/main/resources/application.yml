@@ -27,6 +27,10 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
 
+jwt:
+  secret: ${JWT_SECRET}
+  token-validity-in-milliseconds: ${JWT_TOKEN_VALIDITY}
+
 cors:
   allowed-origins:
     - ${CORS_ALLOWED_ORIGINS}
