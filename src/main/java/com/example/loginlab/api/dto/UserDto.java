@@ -53,7 +53,10 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LoginRequest {
 
+        @NotBlank(message = "이메일 주소를 입력해주세요.")
         private String email;
+
+        @NotBlank(message = "비밀번호를 입력해주세요.")
         private String password;
 
         public void passwordEncryption(EncryptionService encryptionService) {
@@ -69,6 +72,22 @@ public class UserDto {
     public static class LoginResponse {
 
         private String token;
+
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UserResponse {
+
+        private String email;
+
+        private String nickname;
+
+        private String phone;
+
+        private String userLevel;
 
     }
 

@@ -7,10 +7,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,8 +31,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserDto.LoginResponse login(@Valid @RequestBody UserDto.LoginRequest request) {
-        return loginService.login(request);
+    public ResponseEntity<UserDto.LoginResponse> login(@Valid @RequestBody UserDto.LoginRequest request) {
+        return ResponseEntity.ok(loginService.login(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<UserDto.UserResponse> myPage(Principal principal) {
+        return ResponseEntity.ok(userService.findByEmail(principal.getName()));
     }
 
 }

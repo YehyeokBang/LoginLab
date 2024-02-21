@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.loginlab.common.error.ErrorCode.DUPLICATE_USER_EMAIL;
 import static com.example.loginlab.common.error.ErrorCode.DUPLICATE_USER_NICKNAME;
+import static com.example.loginlab.common.error.ErrorCode.NOT_FOUND_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +47,19 @@ public class UserService {
                 .nickname(request.getNickname())
                 .phone(request.getPhone())
                 .build());
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto.UserResponse findByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_USER));
+
+        return UserDto.UserResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .phone(user.getPhone())
+                .userLevel(user.getUserLevel().toString())
+                .build();
     }
 
 }

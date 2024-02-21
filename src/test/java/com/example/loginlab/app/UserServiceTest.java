@@ -3,6 +3,7 @@ package com.example.loginlab.app;
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.encryption.EncryptionService;
 import com.example.loginlab.common.error.exception.CustomException;
+import com.example.loginlab.domain.users.user.User;
 import com.example.loginlab.domain.users.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -91,6 +94,34 @@ class UserServiceTest {
 
         // then
         assertEquals(encryptedPassword, request.getPassword());
+    }
+
+    @Test
+    @DisplayName("이메일로 사용자 조회 실패")
+    void findByEmailFail() {
+        // given
+        String email = "";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // when
+        CustomException exception = assertThrows(CustomException.class, () -> userService.findByEmail(email));
+
+        // then
+        assertEquals("NOT_FOUND_USER", exception.getErrorCode().name());
+    }
+
+    @Test
+    @DisplayName("이메일로 사용자 조회 성공")
+    void findByEmail() {
+        // given
+        String email = "test@gmail.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(new User(email, "testpassword", "tester", "01012345678")));
+
+        // when
+        UserDto.UserResponse userResponse = userService.findByEmail(email);
+
+        // then
+        assertEquals(email, userResponse.getEmail());
     }
 
 }
