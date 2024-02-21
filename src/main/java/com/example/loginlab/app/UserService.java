@@ -2,11 +2,15 @@ package com.example.loginlab.app;
 
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.encryption.EncryptionService;
+import com.example.loginlab.common.error.exception.CustomException;
 import com.example.loginlab.domain.users.user.User;
 import com.example.loginlab.domain.users.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.loginlab.common.error.ErrorCode.DUPLICATE_USER_EMAIL;
+import static com.example.loginlab.common.error.ErrorCode.DUPLICATE_USER_NICKNAME;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +32,10 @@ public class UserService {
     @Transactional
     public void save(UserDto.SignUpRequest request) {
         if (checkEmailDuplicate(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용중인 이메일 주소입니다.");
+            throw new CustomException(DUPLICATE_USER_EMAIL);
         }
         if (checkNicknameDuplicate(request.getNickname())) {
-            throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
+            throw new CustomException(DUPLICATE_USER_NICKNAME);
         }
 
         request.passwordEncryption(encryptionService);

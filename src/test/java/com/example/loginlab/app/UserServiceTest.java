@@ -2,6 +2,7 @@ package com.example.loginlab.app;
 
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.encryption.EncryptionService;
+import com.example.loginlab.common.error.exception.CustomException;
 import com.example.loginlab.domain.users.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,10 +42,10 @@ class UserServiceTest {
         when(userRepository.existsByEmail(request.getEmail())).thenReturn(true);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(request));
+        CustomException exception = assertThrows(CustomException.class, () -> userService.save(request));
 
         // then
-        assertEquals("이미 사용중인 이메일 주소입니다.", exception.getMessage());
+        assertEquals("DUPLICATE_USER_EMAIL", exception.getErrorCode().name());
     }
 
     @Test
@@ -56,10 +57,10 @@ class UserServiceTest {
         when(userRepository.existsByNickname(request.getNickname())).thenReturn(true);
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(request));
+        CustomException exception = assertThrows(CustomException.class, () -> userService.save(request));
 
         // then
-        assertEquals("이미 사용중인 닉네임입니다.", exception.getMessage());
+        assertEquals("DUPLICATE_USER_NICKNAME", exception.getErrorCode().name());
     }
 
     @Test

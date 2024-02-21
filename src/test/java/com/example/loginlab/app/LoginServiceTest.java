@@ -2,7 +2,7 @@ package com.example.loginlab.app;
 
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.encryption.EncryptionService;
-import com.example.loginlab.common.jwt.TokenProvider;
+import com.example.loginlab.common.error.exception.CustomException;
 import com.example.loginlab.domain.users.user.User;
 import com.example.loginlab.domain.users.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +44,7 @@ class LoginServiceTest {
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
 
         // when, then
-        assertThrows(IllegalArgumentException.class, () -> loginService.findUser(request));
+        assertThrows(CustomException.class, () -> loginService.findUserByValidatingCredentials(request));
     }
 
     @Test
@@ -60,7 +60,7 @@ class LoginServiceTest {
         when(encryptionService.match(request.getPassword(), user.getPassword())).thenReturn(true);
 
         // when
-        User result = loginService.findUser(request);
+        User result = loginService.findUserByValidatingCredentials(request);
 
         // then
         assertNotNull(result);

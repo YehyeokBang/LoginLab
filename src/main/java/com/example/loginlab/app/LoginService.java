@@ -2,6 +2,7 @@ package com.example.loginlab.app;
 
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.encryption.EncryptionService;
+import com.example.loginlab.common.error.exception.CustomException;
 import com.example.loginlab.common.jwt.TokenProvider;
 import com.example.loginlab.domain.users.common.UserLevel;
 import com.example.loginlab.domain.users.user.User;
@@ -9,6 +10,8 @@ import com.example.loginlab.domain.users.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.loginlab.common.error.ErrorCode.INVALID_EMAIL_PASSWORD_MATCH;
 
 @Service
 @RequiredArgsConstructor
@@ -21,15 +24,15 @@ public class LoginService {
     private final TokenProvider tokenProvider;
 
     @Transactional(readOnly = true)
-    public User findUser(UserDto.LoginRequest request) {
+    public User findUserByValidatingCredentials(UserDto.LoginRequest request) {
         String email = request.getEmail();
         String rawPassword = request.getPassword();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("이메일 주소 또는 비밀번호가 일치하지 않습니다."));
+                .orElse(null);
 
-        if (!encryptionService.match(rawPassword, user.getPassword())) {
-            throw new IllegalArgumentException("이메일 주소 또는 비밀번호가 일치하지 않습니다.");
+        if (user == null || !encryptionService.match(rawPassword, user.getPassword())) {
+            throw new CustomException(INVALID_EMAIL_PASSWORD_MATCH);
         }
 
         return user;
@@ -37,7 +40,7 @@ public class LoginService {
 
     @Transactional
     public UserDto.LoginResponse login(UserDto.LoginRequest request) {
-        User user = findUser(request);
+        User user = findUserByValidatingCredentials(request);
         String email = user.getEmail();
         UserLevel level = user.getUserLevel();
 
