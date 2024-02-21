@@ -23,8 +23,7 @@ public class LoginService {
 
     private final TokenProvider tokenProvider;
 
-    @Transactional(readOnly = true)
-    public User findUserByValidatingCredentials(UserDto.LoginRequest request) {
+    protected User findUserByValidatingCredentials(UserDto.LoginRequest request) {
         String email = request.getEmail();
         String rawPassword = request.getPassword();
 

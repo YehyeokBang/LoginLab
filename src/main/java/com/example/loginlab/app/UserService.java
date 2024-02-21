@@ -20,13 +20,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final EncryptionService encryptionService;
 
-    @Transactional(readOnly = true)
-    public boolean checkEmailDuplicate(String email) {
+    private boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
     }
 
-    @Transactional(readOnly = true)
-    public boolean checkNicknameDuplicate(String nickname) {
+    private boolean checkNicknameDuplicate(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
 
