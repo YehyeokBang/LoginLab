@@ -1,6 +1,7 @@
 package com.example.loginlab.app;
 
 import com.example.loginlab.api.dto.UserDto;
+import com.example.loginlab.app.certification.EmailCertificationService;
 import com.example.loginlab.app.encryption.EncryptionService;
 import com.example.loginlab.common.error.exception.CustomException;
 import com.example.loginlab.domain.users.user.User;
@@ -18,7 +19,10 @@ import static com.example.loginlab.common.error.ErrorCode.NOT_FOUND_USER;
 public class UserService {
 
     private final UserRepository userRepository;
+
     private final EncryptionService encryptionService;
+
+    private final EmailCertificationService emailCertificationService;
 
     private boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
@@ -58,6 +62,26 @@ public class UserService {
                 .phone(user.getPhone())
                 .userLevel(user.getUserLevel().toString())
                 .build();
+    }
+
+    public String sendCertificationEmail(String email) {
+        return emailCertificationService.sendCertificationEmail(email);
+    }
+
+    @Transactional
+    public String verifyCertificationCode(String email, String inputCode) {
+        if (emailCertificationService.verifyCertificationCode(email, inputCode)) {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new CustomException(NOT_FOUND_USER));
+
+            user.certify();
+
+            emailCertificationService.deleteCertificationCode(email);
+
+            return "인증에 성공했습니다.";
+        }
+
+        return "인증에 실패했습니다.";
     }
 
 }

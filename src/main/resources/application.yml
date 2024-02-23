@@ -27,6 +27,18 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
 
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secret: ${JWT_SECRET}
   token-validity-in-milliseconds: ${JWT_TOKEN_VALIDITY}

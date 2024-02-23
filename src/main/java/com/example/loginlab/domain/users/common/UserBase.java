@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.example.loginlab.domain.users.common.UserLevel.UNAUTH;
+import static com.example.loginlab.domain.users.common.UserLevel.USER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -33,5 +35,11 @@ public abstract class UserBase extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     protected UserLevel userLevel;
+
+    public void certify() {
+        if (this.userLevel == UNAUTH) {
+            this.userLevel = USER;
+        }
+    }
 
 }

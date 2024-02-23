@@ -16,7 +16,10 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "N001", "존재하지 않는 사용자입니다."),
 
     // INVALID
-    INVALID_EMAIL_PASSWORD_MATCH(HttpStatus.UNAUTHORIZED, "I001", "이메일과 비밀번호가 일치하지 않습니다.");
+    INVALID_EMAIL_PASSWORD_MATCH(HttpStatus.UNAUTHORIZED, "I001", "이메일과 비밀번호가 일치하지 않습니다."),
+
+    // FAILED
+    FAILED_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "이메일 전송에 실패했습니다. (재시도 및 관리자 문의)");
 
     private final HttpStatus httpStatus;
 
