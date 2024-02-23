@@ -22,6 +22,7 @@ class UserServiceTest {
 
     @Mock
     UserRepository userRepository;
+
     @Mock
     EncryptionService encryptionService;
 
