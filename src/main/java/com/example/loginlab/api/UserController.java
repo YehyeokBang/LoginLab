@@ -3,6 +3,7 @@ package com.example.loginlab.api;
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.LoginService;
 import com.example.loginlab.app.UserService;
+import com.example.loginlab.common.annotation.CurrentUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,18 +36,18 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserDto.UserResponse> myPage(Principal principal) {
-        return ResponseEntity.ok(userService.findByEmail(principal.getName()));
+    public ResponseEntity<UserDto.UserResponse> myPage(@CurrentUser String email) {
+        return ResponseEntity.ok(userService.findByEmail(email));
     }
 
     @GetMapping("/certification/email")
-    public ResponseEntity<String> emailCertification(Principal principal) {
-        return ResponseEntity.ok(userService.sendCertificationEmail(principal.getName()));
+    public ResponseEntity<String> emailCertification(@CurrentUser String email) {
+        return ResponseEntity.ok(userService.sendCertificationEmail(email));
     }
 
     @PostMapping("/certification/email/{code}")
-    public ResponseEntity<String> emailCertification(@PathVariable String code, Principal principal) {
-        return ResponseEntity.ok(userService.verifyCertificationCode(principal.getName(), code));
+    public ResponseEntity<String> emailCertification(@CurrentUser String email, @PathVariable String code) {
+        return ResponseEntity.ok(userService.verifyCertificationCode(email, code));
     }
 
 }
