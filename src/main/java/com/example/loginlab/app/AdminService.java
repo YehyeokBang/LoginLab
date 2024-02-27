@@ -50,6 +50,7 @@ public class AdminService {
                             .nickname(user.getNickname())
                             .phone(user.getPhone())
                             .userLevel(user.getUserLevel().toString())
+                            .socialTypes(user.getSocialTypes())
                             .build());
     }
 

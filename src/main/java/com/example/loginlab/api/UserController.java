@@ -1,5 +1,6 @@
 package com.example.loginlab.api;
 
+import com.example.loginlab.api.dto.OAuthDto;
 import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.LoginService;
 import com.example.loginlab.app.UserService;
@@ -34,6 +35,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserDto.LoginResponse> login(@Valid @RequestBody UserDto.LoginRequest request) {
         return ResponseEntity.ok(loginService.login(request));
+    }
+
+    @PostMapping("/login/oauth")
+    public ResponseEntity<UserDto.LoginResponse> loginOAuth(@Valid @RequestBody OAuthDto.LoginRequest request) {
+        return ResponseEntity.ok(loginService.socialLogin(request));
     }
 
     @GetMapping

@@ -92,6 +92,8 @@ public class UserDto {
 
         private String userLevel;
 
+        private String[] socialTypes;
+
     }
 
     @Getter

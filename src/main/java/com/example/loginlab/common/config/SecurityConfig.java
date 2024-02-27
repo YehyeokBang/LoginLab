@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/users/signup", "/users/login").permitAll()
+                                .requestMatchers("/users/signup", "/users/login/**", "oauth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling((exceptionHandling) -> exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))

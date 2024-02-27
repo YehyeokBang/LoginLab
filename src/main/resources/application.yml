@@ -43,6 +43,11 @@ jwt:
   secret: ${JWT_SECRET}
   token-validity-in-milliseconds: ${JWT_TOKEN_VALIDITY}
 
+kakao:
+  auth:
+    rest-api-key: ${KAKAO_REST_API_KEY}
+    redirect-url: ${KAKAO_REDIRECT_URL}
+
 cors:
   allowed-origins:
     - ${CORS_ALLOWED_ORIGINS}

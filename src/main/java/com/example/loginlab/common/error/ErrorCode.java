@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     // DUPLICATE
-    DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST, "D001", "이미 사용 중인 이메일입니다."),
+    DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST, "D001", "이미 사용 중인 이메일입니다. (본인인 경우 이미 가입된 소셜 계정이 있을 수 있습니다.)"),
     DUPLICATE_USER_NICKNAME(HttpStatus.BAD_REQUEST, "D002", "이미 사용 중인 닉네임입니다."),
 
     // NOT_FOUND
@@ -21,6 +21,7 @@ public enum ErrorCode {
 
     // FAILED
     FAILED_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "이메일 전송에 실패했습니다. (재시도 및 관리자 문의)"),
+    FAILED_TO_KAKAO_LOGIN(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "카카오 로그인에 실패했습니다. (재시도 및 관리자 문의)"),
 
     // UNAUTHORIZED
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "U001", "로그인이 필요합니다."),
