@@ -1,6 +1,6 @@
 package com.example.loginlab.common.config;
 
-
+import com.example.loginlab.common.error.CustomAuthenticationEntryPoint;
 import com.example.loginlab.common.jwt.JwtFilter;
 import com.example.loginlab.common.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/users/signup", "/users/login").permitAll()
                                 .anyRequest().authenticated()
                 )
+                .exceptionHandling((exceptionHandling) -> exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
