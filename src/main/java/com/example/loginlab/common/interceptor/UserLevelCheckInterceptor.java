@@ -1,6 +1,5 @@
 package com.example.loginlab.common.interceptor;
 
-import com.example.loginlab.app.UserService;
 import com.example.loginlab.common.annotation.UserLevelCheck;
 import com.example.loginlab.common.error.exception.CustomException;
 import com.example.loginlab.domain.users.user.User;
