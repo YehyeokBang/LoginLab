@@ -4,6 +4,7 @@ import com.example.loginlab.api.dto.UserDto;
 import com.example.loginlab.app.LoginService;
 import com.example.loginlab.app.UserService;
 import com.example.loginlab.common.annotation.CurrentUser;
+import com.example.loginlab.common.annotation.UserLevelCheck;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,16 +37,19 @@ public class UserController {
     }
 
     @GetMapping
+    @UserLevelCheck
     public ResponseEntity<UserDto.UserResponse> myPage(@CurrentUser String email) {
         return ResponseEntity.ok(userService.findByEmail(email));
     }
 
     @GetMapping("/certification/email")
+    @UserLevelCheck
     public ResponseEntity<String> emailCertification(@CurrentUser String email) {
         return ResponseEntity.ok(userService.sendCertificationEmail(email));
     }
 
     @PostMapping("/certification/email/{code}")
+    @UserLevelCheck
     public ResponseEntity<String> emailCertification(@CurrentUser String email, @PathVariable String code) {
         return ResponseEntity.ok(userService.verifyCertificationCode(email, code));
     }

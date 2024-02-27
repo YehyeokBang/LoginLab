@@ -1,6 +1,7 @@
 package com.example.loginlab.api.dto;
 
 import com.example.loginlab.app.encryption.EncryptionService;
+import com.example.loginlab.domain.users.common.UserLevel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -81,6 +82,8 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserResponse {
 
+        private Long id;
+
         private String email;
 
         private String nickname;
@@ -88,6 +91,28 @@ public class UserDto {
         private String phone;
 
         private String userLevel;
+
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UserSearchRequest {
+
+        private Long id;
+
+        private String email;
+
+        private String nickname;
+
+        private UserLevel userLevel;
+
+        @Builder
+        public UserSearchRequest(Long id, String email, String nickname, UserLevel userLevel) {
+            this.id = id;
+            this.email = email;
+            this.nickname = nickname;
+            this.userLevel = userLevel;
+        }
 
     }
 

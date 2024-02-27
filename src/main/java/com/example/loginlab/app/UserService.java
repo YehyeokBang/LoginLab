@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.loginlab.common.error.ErrorCode.DUPLICATE_USER_EMAIL;
 import static com.example.loginlab.common.error.ErrorCode.DUPLICATE_USER_NICKNAME;
+import static com.example.loginlab.common.error.ErrorCode.INVALID_CERTIFICATION_CODE;
 import static com.example.loginlab.common.error.ErrorCode.NOT_FOUND_USER;
 
 @Service
@@ -57,6 +58,7 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_USER));
 
         return UserDto.UserResponse.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .phone(user.getPhone())
@@ -81,7 +83,7 @@ public class UserService {
             return "인증에 성공했습니다.";
         }
 
-        return "인증에 실패했습니다.";
+        throw new CustomException(INVALID_CERTIFICATION_CODE);
     }
 
 }
