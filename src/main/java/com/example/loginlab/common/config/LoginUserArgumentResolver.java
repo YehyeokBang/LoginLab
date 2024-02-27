@@ -12,7 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.security.Principal;
 
-import static com.example.loginlab.common.error.ErrorCode.NOT_FOUND_USER;
+import static com.example.loginlab.common.error.ErrorCode.UNAUTHORIZED_USER;
 
 @Component
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -27,7 +27,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Principal principal = webRequest.getUserPrincipal();
         if (principal == null) {
-            throw new CustomException(NOT_FOUND_USER);
+            throw new CustomException(UNAUTHORIZED_USER);
         }
 
         return principal.getName();

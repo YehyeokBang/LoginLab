@@ -17,9 +17,16 @@ public enum ErrorCode {
 
     // INVALID
     INVALID_EMAIL_PASSWORD_MATCH(HttpStatus.UNAUTHORIZED, "I001", "이메일과 비밀번호가 일치하지 않습니다."),
+    INVALID_CERTIFICATION_CODE(HttpStatus.BAD_REQUEST, "I002", "인증 코드가 일치하지 않습니다."),
 
     // FAILED
-    FAILED_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "이메일 전송에 실패했습니다. (재시도 및 관리자 문의)");
+    FAILED_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "이메일 전송에 실패했습니다. (재시도 및 관리자 문의)"),
+
+    // UNAUTHORIZED
+    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "U001", "로그인이 필요합니다."),
+
+    // FORBIDDEN
+    FORBIDDEN_USER_LEVEL(HttpStatus.FORBIDDEN, "F001", "접근 권한이 없습니다.");
 
     private final HttpStatus httpStatus;
 

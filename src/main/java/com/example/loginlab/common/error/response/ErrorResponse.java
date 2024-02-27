@@ -29,4 +29,14 @@ public class ErrorResponse {
                 );
     }
 
+    // Spring Security 에서는 CustomException 사용 불가능
+    public static ErrorResponse of(ErrorCode e){
+        return ErrorResponse.builder()
+                .status(e.getHttpStatus().value())
+                .name(e.name())
+                .code(e.getCode())
+                .message(e.getMessage())
+                .build();
+    }
+
 }
