@@ -1,5 +1,6 @@
 package com.example.loginlab.domain.users.user.social;
 
+import com.example.loginlab.domain.BaseTimeEntity;
 import com.example.loginlab.domain.users.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SocialConnection {
+public class SocialConnection extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
