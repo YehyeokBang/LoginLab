@@ -16,27 +16,32 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-import static com.example.loginlab.common.error.ErrorCode.FAILED_TO_KAKAO_LOGIN;
-import static org.springframework.http.HttpMethod.POST;
+import static com.example.loginlab.common.error.ErrorCode.FAILED_TO_GOOGLE_LOGIN;
+import static org.springframework.http.HttpMethod.GET;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoOAuthService implements OAuthService {
+public class GoogleOAuthService implements OAuthService {
 
-    @Value("${oauth.kakao.rest-api-key}")
-    private String restApiKey;
+    @Value("${oauth.google.client-id}")
+    private String clientId;
 
-    @Value("${oauth.kakao.redirect-url}")
+    @Value("${oauth.google.client-secret}")
+    private String clientSecret;
+
+    @Value("${oauth.google.redirect-url}")
     private String redirectUri;
 
     private final RestTemplate restTemplate;
 
     private HttpEntity<MultiValueMap<String, String>> createRequestEntityToGetAccessToken(String code) {
         MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-        requestParams.add("grant_type", "authorization_code");
-        requestParams.add("client_id", restApiKey);
-        requestParams.add("redirect_uri", redirectUri);
         requestParams.add("code", code);
+        requestParams.add("scope", "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email");
+        requestParams.add("client_id", clientId);
+        requestParams.add("client_secret", clientSecret);
+        requestParams.add("redirect_uri", redirectUri);
+        requestParams.add("grant_type", "authorization_code");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -51,28 +56,23 @@ public class KakaoOAuthService implements OAuthService {
                 .get("access_token")
                 .getAsString();
 
-        String refreshToken = element.getAsJsonObject()
-                .get("refresh_token")
-                .getAsString();
-
         return OAuthDto.LoginResponse.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
     }
 
     @Override
     public OAuthDto.LoginResponse getAccessToken(String code) {
-        String requestUrl = "https://kauth.kakao.com/oauth/token";
+        String requestUrl = "https://oauth2.googleapis.com/token";
+
         HttpEntity<MultiValueMap<String, String>> requestEntity = createRequestEntityToGetAccessToken(code);
+        ResponseEntity<String> response = restTemplate.postForEntity(requestUrl, requestEntity, String.class);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(requestUrl, POST, requestEntity, String.class);
-
-        if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-            throw new CustomException(FAILED_TO_KAKAO_LOGIN);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new CustomException(FAILED_TO_GOOGLE_LOGIN);
         }
 
-        return parseAccessToken(responseEntity);
+        return parseAccessToken(response);
     }
 
     private HttpEntity<MultiValueMap<String, String>> createRequestEntityToGetUserInfo() {
@@ -85,27 +85,21 @@ public class KakaoOAuthService implements OAuthService {
     private OAuthDto.UserResponse parseUserInfo(ResponseEntity<String> response) {
         JsonElement element = JsonParser.parseString(Objects.requireNonNull(response.getBody())).getAsJsonObject();
 
-        System.out.println(element);
-
-        String socialUid = element.getAsJsonObject()
+        String id = element.getAsJsonObject()
                 .get("id")
                 .getAsString();
 
         String email = element.getAsJsonObject()
-                .get("kakao_account")
-                .getAsJsonObject()
                 .get("email")
                 .getAsString();
 
         String nickname = element.getAsJsonObject()
-                .get("properties")
-                .getAsJsonObject()
-                .get("nickname")
+                .get("name")
                 .getAsString();
 
         return OAuthDto.UserResponse.builder()
-                .socialUid(socialUid)
-                .socialType("KAKAO")
+                .socialUid(id)
+                .socialType("GOOGLE")
                 .email(email)
                 .nickname(nickname)
                 .build();
@@ -113,16 +107,16 @@ public class KakaoOAuthService implements OAuthService {
 
     @Override
     public OAuthDto.UserResponse getUserInfo(String accessToken) {
-        String requestUrl = "https://kapi.kakao.com/v2/user/me?access_token=" + accessToken;
+        String requestUrl = "https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + accessToken;
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = createRequestEntityToGetUserInfo();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(requestUrl, POST, requestEntity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(requestUrl, GET, requestEntity, String.class);
 
-        if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-            throw new CustomException(FAILED_TO_KAKAO_LOGIN);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new CustomException(FAILED_TO_GOOGLE_LOGIN);
         }
 
-        return parseUserInfo(responseEntity);
+        return parseUserInfo(response);
     }
 
 }

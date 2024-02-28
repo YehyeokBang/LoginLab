@@ -43,10 +43,14 @@ jwt:
   secret: ${JWT_SECRET}
   token-validity-in-milliseconds: ${JWT_TOKEN_VALIDITY}
 
-kakao:
-  auth:
+oauth:
+  kakao:
     rest-api-key: ${KAKAO_REST_API_KEY}
     redirect-url: ${KAKAO_REDIRECT_URL}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+    redirect-url: ${GOOGLE_REDIRECT_URL}
 
 cors:
   allowed-origins:
