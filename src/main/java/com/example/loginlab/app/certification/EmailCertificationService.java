@@ -2,7 +2,6 @@ package com.example.loginlab.app.certification;
 
 import com.example.loginlab.common.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,8 @@ public class EmailCertificationService {
         return code.equals(inputCode);
     }
 
-    @CacheEvict(cacheNames = "emailCertificationCode", value = "emailCertificationCode", key = "#email")
-    public void deleteCertificationCode(String email) {}
+    public void deleteCertificationCode(String email) {
+        certificationCodeService.deleteCertificationCode(email);
+    }
 
 }
