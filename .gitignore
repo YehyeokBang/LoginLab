@@ -44,4 +44,4 @@ gradle
 build
 
 ### Docker-compose ###
-docker-compose.yml
+docker-compose**
