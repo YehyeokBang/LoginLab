@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     // DUPLICATE
-    DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST, "D001", "이미 사용 중인 이메일입니다. (본인인 경우 이미 가입된 소셜 계정이 있을 수 있습니다.)"),
+    DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST, "D001", "이미 사용 중인 이메일입니다. (이미 가입된 소셜 계정이 있을 수 있습니다.)"),
     DUPLICATE_USER_NICKNAME(HttpStatus.BAD_REQUEST, "D002", "이미 사용 중인 닉네임입니다."),
 
     // NOT_FOUND

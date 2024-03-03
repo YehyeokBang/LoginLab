@@ -1,20 +1,21 @@
-# Build stage
+# Build
 FROM gradle:7.4-jdk17 as build
+
 WORKDIR /app
 
-# Copy source code
 COPY --chown=gradle:gradle . .
 
-# Build application
-RUN gradle build --no-daemon -x test
+RUN gradle clean build --no-daemon -x test
 
-# Runtime stage
+# Run
 FROM openjdk:17-jdk-slim
-EXPOSE 8080
+
+ARG JAR_FILE=build/libs/*.jar
+
 WORKDIR /app
 
-# Copy built application
-COPY --from=build /app/build/libs/*.jar /app/app.jar
+COPY --from=build /app/${JAR_FILE} /app/
 
-# Run application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/LoginLab-0.0.1-SNAPSHOT.jar"]
